@@ -3,8 +3,8 @@
 import { useState } from "react";
 import Image from "next/image";
 import logo from "@/public/logo.png";
+import stampImg from "@/public/stamp.png";
 import { NICKNAME_MAX, useStore, validateNickname } from "@/lib/store";
-import { StampSeal } from "./StampSeal";
 
 // 최초 방문 닉네임 설정 (USER_FLOW 1장) — 로그인 없이 닉네임만으로 시작
 export function Onboarding() {
@@ -23,7 +23,13 @@ export function Onboarding() {
   return (
     <div className="flex min-h-dvh flex-col px-7 pb-12 pt-20 animate-fade">
       <header className="flex flex-col items-center text-center">
-        <StampSeal size={84} className="-rotate-6 drop-shadow-sm" />
+        <Image
+          src={stampImg}
+          alt="성심당 도장"
+          priority
+          sizes="88px"
+          className="stamp-red h-auto w-[88px] -rotate-6 drop-shadow-sm"
+        />
         <Image
           src={logo}
           alt="성심당 — 1956 이래, 대한민국 대전"
@@ -80,7 +86,7 @@ export function Onboarding() {
           onClick={submit}
           className="w-full rounded-xl bg-ssred py-4 text-[16px] font-bold text-paper shadow-card transition-colors duration-150 active:bg-ssred-deep disabled:bg-latte disabled:text-paper"
         >
-          스탬프 시작하기
+          시작하기
         </button>
         <p className="mx-auto mt-4 w-fit rounded-full bg-cream/90 px-4 py-1.5 text-center text-[11.5px] font-medium leading-relaxed text-brown-soft backdrop-blur-[2px]">
           닉네임과 스탬프 기록은 이 브라우저에만 저장됩니다.
