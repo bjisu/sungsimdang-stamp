@@ -10,6 +10,7 @@ import {
   type ReactNode,
 } from "react";
 import type { StampRecord } from "./types";
+import { DUP_WINDOW_MS } from "./config";
 
 // 백엔드 미사용 — 모든 데이터는 브라우저 localStorage에 보관 (PRD 5장)
 const NICKNAME_KEY = "ssd.nickname";
@@ -25,6 +26,10 @@ export function validateNickname(raw: string): string | null {
   return null;
 }
 
+export type AccrueResult =
+  | { ok: true; record: StampRecord }
+  | { ok: false; reason: "duplicate" };
+
 interface StoreValue {
   /** localStorage 로드 완료 여부 (SSR 하이드레이션 안전장치) */
   ready: boolean;
@@ -32,6 +37,8 @@ interface StoreValue {
   stamps: StampRecord[];
   setNickname: (name: string) => void;
   addStamp: (branch: string) => StampRecord;
+  /** NFC 적립용 — 같은 지점 1분 이내 중복 적립 방지 */
+  addStampSafe: (branch: string) => AccrueResult;
 }
 
 const StoreContext = createContext<StoreValue | null>(null);
@@ -81,8 +88,22 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     return created;
   }, []);
 
+  const addStampSafe = useCallback(
+    (branch: string): AccrueResult => {
+      const now = Date.now();
+      const recent = stampsRef.current.some(
+        (s) => s.branch === branch && now - new Date(s.at).getTime() < DUP_WINDOW_MS,
+      );
+      if (recent) return { ok: false, reason: "duplicate" };
+      return { ok: true, record: addStamp(branch) };
+    },
+    [addStamp],
+  );
+
   return (
-    <StoreContext.Provider value={{ ready, nickname, stamps, setNickname, addStamp }}>
+    <StoreContext.Provider
+      value={{ ready, nickname, stamps, setNickname, addStamp, addStampSafe }}
+    >
       {children}
     </StoreContext.Provider>
   );

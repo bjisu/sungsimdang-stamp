@@ -12,3 +12,21 @@ export const BRANCHES = [
 ] as const;
 
 export type Branch = (typeof BRANCHES)[number];
+
+/**
+ * NFC 지점 코드 매핑 테이블 — 현재 본점만 활성화.
+ * 지점 추가 시 아래에 한 줄만 추가하면 된다.
+ * 예) dcc: "DCC점", lotte: "롯데백화점 대전점", station: "대전역점", cake: "케익부띠끄"
+ */
+export const STORE_CODES: Record<string, string> = {
+  mainstore: "본점",
+};
+
+/** 지점 코드 → 지점명. 미등록 코드는 null */
+export function resolveStore(code: string | null | undefined): string | null {
+  if (!code) return null;
+  return STORE_CODES[code] ?? null;
+}
+
+/** 같은 지점 중복 적립 방지 시간 (1분) */
+export const DUP_WINDOW_MS = 60_000;

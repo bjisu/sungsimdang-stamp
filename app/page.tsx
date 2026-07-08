@@ -8,12 +8,14 @@ import type { StampRecord } from "@/lib/types";
 import { formatMonthDay } from "@/lib/format";
 import { StampBoard } from "@/components/StampBoard";
 import { AccrueSheet } from "@/components/AccrueSheet";
+import { NfcSheet } from "@/components/NfcSheet";
 import { StampModal } from "@/components/StampModal";
 
 // S1 메인 화면 (PRD 3.1)
 export default function HomePage() {
   const { nickname, stamps, addStamp } = useStore();
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [nfcOpen, setNfcOpen] = useState(false);
   const [justStamped, setJustStamped] = useState<StampRecord | null>(null);
 
   const total = stamps.length;
@@ -73,20 +75,38 @@ export default function HomePage() {
         <StampBoard total={total} />
       </div>
 
-      {/* 적립 시뮬레이션 트리거 (PRD M-6) */}
+      {/* NFC 스탬프 적립 — 안드로이드는 Web NFC 스캔, 아이폰은 태깅 안내 (하이브리드) */}
       <button
         type="button"
-        onClick={() => setSheetOpen(true)}
+        onClick={() => setNfcOpen(true)}
         className="mt-5 flex w-full items-center justify-center gap-2.5 rounded-xl bg-brown py-4 text-[15.5px] font-bold text-cream shadow-card transition-colors active:bg-brown/85"
       >
         <TagIcon />
         스탬프 적립하기
       </button>
-      <p className="mt-2.5 pb-8 text-center text-[11.5px] font-medium text-brown-soft [text-shadow:0_1px_6px_rgba(250,244,230,0.9)]">
-        데모 버튼입니다 · 실제 서비스에서는 매장 NFC 태깅으로 적립돼요
+      <p className="mt-2.5 text-center text-[11.5px] font-medium text-brown-soft [text-shadow:0_1px_6px_rgba(250,244,230,0.9)]">
+        매장의 NFC 스탬프에 휴대폰을 갖다 대면 적립돼요
       </p>
+
+      {/* (개발 확인용) 적립 시뮬레이션 (PRD M-6) — 정식 오픈 시 제거 */}
+      <button
+        type="button"
+        onClick={() => setSheetOpen(true)}
+        className="mx-auto mb-8 mt-5 block text-center text-[11px] text-latte underline underline-offset-2"
+      >
+        데모 · 지점 선택 시뮬레이션
+      </button>
       </div>
 
+      {nfcOpen && (
+        <NfcSheet
+          onSuccess={(record) => {
+            setNfcOpen(false);
+            setJustStamped(record);
+          }}
+          onClose={() => setNfcOpen(false)}
+        />
+      )}
       {sheetOpen && (
         <AccrueSheet onPick={handlePick} onClose={() => setSheetOpen(false)} />
       )}
