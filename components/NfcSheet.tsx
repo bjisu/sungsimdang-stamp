@@ -201,17 +201,18 @@ export function NfcSheet({
 /** 휴대폰 + 전파 아이콘 (스캔 중이면 물결이 퍼지는 애니메이션) */
 function NfcWaves({ active = false }: { active?: boolean }) {
   return (
-    <div className="relative mx-auto flex h-[92px] w-[92px] items-center justify-center">
+    <div className="relative mx-auto mt-1 flex h-[104px] w-[104px] items-center justify-center">
       {active && (
         <>
-          <span className="absolute inset-0 animate-ping rounded-full bg-ssred/15 [animation-duration:1.6s]" />
-          <span className="absolute inset-3 animate-ping rounded-full bg-ssred/20 [animation-duration:1.6s] [animation-delay:0.35s]" />
+          <span className="absolute inset-2 animate-nfc-pulse rounded-full bg-ssred/15" />
+          <span className="absolute inset-5 animate-nfc-pulse rounded-full bg-ssred/20 [animation-delay:0.4s]" />
         </>
       )}
       <span className="relative flex h-16 w-16 items-center justify-center rounded-full bg-ssred/10">
-        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" className="text-ssred">
+        {/* 전파 arc가 잘리지 않도록 viewBox에 여유 폭 확보 */}
+        <svg width="34" height="30" viewBox="0 0 27 24" fill="none" className="text-ssred">
           <rect
-            x="7"
+            x="6"
             y="3.5"
             width="10"
             height="17"
@@ -219,9 +220,9 @@ function NfcWaves({ active = false }: { active?: boolean }) {
             stroke="currentColor"
             strokeWidth="1.7"
           />
-          <path d="M10.5 17.8h3" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+          <path d="M9.5 17.8h3" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
           <path
-            d="M20 8.5a6.5 6.5 0 0 1 0 7M22.5 6.5a10 10 0 0 1 0 11"
+            d="M19 8.5a6 6 0 0 1 0 7M21.5 6.5a9.5 9.5 0 0 1 0 11"
             stroke="currentColor"
             strokeWidth="1.5"
             strokeLinecap="round"

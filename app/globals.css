@@ -40,6 +40,19 @@
   --animate-rise: rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
   --animate-fade: fade 0.3s ease-out both;
   --animate-sheet-up: sheet-up 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-nfc-pulse: nfc-pulse 1.6s ease-out infinite;
+}
+
+/* NFC 스캔 대기 — 컨테이너를 크게 벗어나지 않는 은은한 펄스 */
+@keyframes nfc-pulse {
+  0% {
+    opacity: 0.7;
+    transform: scale(0.85);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.45);
+  }
 }
 
 @keyframes stamp-press {
