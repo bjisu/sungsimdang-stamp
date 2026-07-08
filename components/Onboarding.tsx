@@ -23,12 +23,13 @@ export function Onboarding() {
   return (
     <div className="flex min-h-dvh flex-col px-7 pb-12 pt-20 animate-fade">
       <header className="flex flex-col items-center text-center">
+        {/* 닉네임 설정 화면에서만 검정(차콜) 톤 — 다른 화면의 레드 도장에는 영향 없음 */}
         <Image
           src={stampImg}
           alt="성심당 도장"
           priority
           sizes="88px"
-          className="stamp-red h-auto w-[88px] -rotate-6 drop-shadow-sm"
+          className="h-auto w-[88px] -rotate-6 opacity-85 drop-shadow-sm [filter:brightness(0)]"
         />
         <Image
           src={logo}
